@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>EaselJS demo: Mouse Events on Stage</title>
+	<link href="_shared/demo.css" rel="stylesheet" type="text/css">
+	<script src="easeljs-0.7.1.min.js"></script>
+	<script>
+		var stage, label, shape, oldX, oldY, size=null, color=null, paint_flag = false;
+		
+		function init(){
+			//alert("function called\n");
+			stage = new createjs.Stage("demoCanvas");
+			stage.enableDOMEvents(true);
+			//label = new createjs.Text("finger paint", "24px Arial");
+			//label.x = label.y = 0;
+			
+			//shape = new createjs.Shape();
+			//stage.addChild(shape, label);
+			
+			// set up our defaults:
+			color = "#0FF";
+			size = 2;
+			
+			// add handler for stage mouse events:
+			stage.on("stagemousedown", function(event) {
+				paint_flag = true;
+			})                
+			
+			stage.on("stagemouseup", function(event) {
+				paint_flag = false;
+			})
+			 
+			
+		    stage.on("stagemousemove",function(evt) {
+				if ((oldX)&&(paint_flag)) {
+					shape.graphics.beginStroke(color)
+								  .setStrokeStyle(size, "round")
+								  .moveTo(oldX, oldY)
+								  .lineTo(evt.stageX, evt.stageY);
+					stage.update();
+				}
+				oldX = evt.stageX;
+				oldY = evt.stageY;
+			})
+			
+			stage.update();
+		}
+		
+		
+		function changebrush() {
+			stage.enableDOMEvents(true);
+			
+			shape = new createjs.Shape();
+			stage.addChild(shape, label);
+			
+			color = document.getElementById("color").value;
+			size = parseInt(document.getElementById("psize").value);
+		}
+		
+		function createLabel(){
+			var txt = document.getElementById("labeltext").value;
+			label = new createjs.Text(txt, "24px Arial");
+			label.x = label.y = 0;
+			label.color = color;
+			label.x = parseInt(document.getElementById("xcor").value);
+			label.y = parseInt(document.getElementById("ycor").value);
+			shape = new createjs.Shape();
+			stage.addChild(shape, label);
+			stage.update();
+		}
+		
+		function saveFile(){
+			var canvas = document.getElementById("demoCanvas");
+			//var img = canvas.toDataURL("image/png");
+			//document.write('<img src="'+img+'"/>');
+			var dataURL = canvas.toDataURL();
+
+			// set canvasImg image src to dataURL
+			// so it can be saved as an image
+			document.getElementById('demoCanvas').src = dataURL;
+			console.log(dataURL);
+		}
+		
+	</script>
+</head>
+<body onLoad="init();">
+	<form name="input" onsubmit="return changebrush();">
+	Pen Color: <input type="text" name="color" id="color">
+	Pen Size: <input type="text" name="psize" id="psize">
+	<button name="data" type="button" onclick="changebrush()">Submit</button>
+	</form> 
+	<br/>
+	<form name="input" onsubmit="return createLabel();">
+	Text: <input type="text" name="ltext" id="labeltext">
+	X: <input type="text" name="Xcor" id="xcor">
+	Y: <input type="text" name="Ycor" id="ycor">
+	<button name="ldata" type="button" onclick="createLabel()">Submit</button>
+	</form>
+	<br/>
+	<form name="savebox" onsubmit="return saveFile();">
+	<button name="save" type="button" onclick="saveFile()">Save</button>
+	</form>
+	<canvas id="demoCanvas" width="1080" height="1200">
+		alternate content
+	</canvas>
+</body>
+</html>
