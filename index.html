@@ -1,7 +1,5 @@
 <!-- Author: Akshay verma
      Tools : JS, HTML5
-     https://github.com/letsgomaboi
-     v_akshay
 -->
 <!DOCTYPE html>
 <html>
@@ -13,16 +11,9 @@
 		var stage, label, shape, oldX, oldY, size=null, color=null, paint_flag = false;
 		
 		function init(){
-			//alert("function called\n");
 			stage = new createjs.Stage("demoCanvas");
 			stage.enableDOMEvents(true);
-			//label = new createjs.Text("finger paint", "24px Arial");
-			//label.x = label.y = 0;
 			
-			//shape = new createjs.Shape();
-			//stage.addChild(shape, label);
-			
-			// set up our defaults:
 			color = "#0FF";
 			size = 2;
 			
@@ -76,12 +67,9 @@
 		
 		function saveFile(){
 			var canvas = document.getElementById("demoCanvas");
-			//var img = canvas.toDataURL("image/png");
-			//document.write('<img src="'+img+'"/>');
+
 			var dataURL = canvas.toDataURL();
 
-			// set canvasImg image src to dataURL
-			// so it can be saved as an image
 			document.getElementById('demoCanvas').src = dataURL;
 			console.log(dataURL);
 		}
